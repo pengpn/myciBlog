@@ -28,20 +28,34 @@
     <script src="/myciBlog/public/admin/js/html5shiv.min.js"></script>
     <script src="/myciBlog/public/admin/js/respond.min.js"></script>
     <![endif]-->
+
+    <style>
+        .error{
+            color:#F00;font-weight:bold;
+        }
+        #usernameError{
+            position: absolute;
+            left: 582px;
+            top: 131px;
+        }
+        #passwordError{
+            position: absolute;
+            left: 582px;
+            top: 171px;
+        }
+    </style>
 </head>
 
 <div class="container">
-    <form action="<?=site_url('admin/user/register') ?>" method="post" enctype="multipart/form-data" class="form-signin">
+    <form id="formreg" action="<?=site_url('admin/user/register') ?>" method="post" enctype="multipart/form-data" class="form-signin">
         <h2 class="form-signin-heading">MY_BLOG</h2>
 
         <label for="inputEmail" class="sr-only">用户名</label>
         <input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email address" autofocus="">
-        <?php $error = form_error('inputEmail') ?>
-        <span style="color:#F00;font-weight:bold;"><?=$error ?></span>
+        <span id="usernameError" class="error"></span>
         <label for="inputPassword" class="sr-only">密码</label>
         <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Password" >
-        <?php $error = form_error('inputPassword') ?>
-        <span style="color:#F00;font-weight:bold;"><?=$error ?></span>
+        <span id="passwordError" class="error"></span>
         <button class="btn btn-lg btn-primary btn-block"  id="submit">注册</button>
     </form>
 </div><!-- /container -->
@@ -60,14 +74,35 @@
     }
 
     $(function () {
-        $("#submit").click(function(){
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: data,
-                success: success,
-                dataType: dataType
-            });
+        $("#inputEmail").blur(function(){
+            var url = "<?=site_url('admin/user/checkUser');?>";
+            var username = $("#inputEmail").val();
+            if(username == ""){
+                $("#usernameError").text("用户名不能为空");
+            }else if(username.length<6 || username.length>20){
+                $("#usernameError").text("用户名必须为6-20个字符");
+            }else{
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {"userName" : username},
+                    dataType: "json",
+                    success: function (result) {
+                        if(result.status == 0){
+                            $("#formreg").submit(function(e){
+                                e.preventDefault();
+                            });
+                        }
+                        $("#usernameError").text(result.msg);
+                    }
+                });
+            }
+        });
+        $("#inputPassword").blur(function(){
+            var password = $("#inputPassword").val();
+            if(password == ""){
+                $("#passwordError").text("密码不能为空");
+            }
         });
     });
 
