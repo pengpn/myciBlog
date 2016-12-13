@@ -9,12 +9,12 @@ class User_Model extends CI_Model{
     /**
      * User_model constructor.
      */
-    public function insert_user(){
+    public function insert_user($username,$password){
         //构造数据
         $data = array(
-            'name' => $this->input->post('inputEmail'),
-            'password' => $this->input->post('inputPassword'),
-            'mail' => $this->input->post('inputEmail'),
+            'name' => $username,
+            'password' => $password,
+            'mail' => $username,
         );
         $this->db->insert('my_user',$data);
 

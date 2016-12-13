@@ -33,16 +33,7 @@
         .error{
             color:#F00;font-weight:bold;
         }
-        #usernameError{
-            position: absolute;
-            left: 582px;
-            top: 131px;
-        }
-        #passwordError{
-            position: absolute;
-            left: 582px;
-            top: 171px;
-        }
+
     </style>
 </head>
 
@@ -75,7 +66,7 @@
 
     $(function () {
         $("#inputEmail").blur(function(){
-            var url = "<?=site_url('admin/user/checkUser');?>";
+            var url = "<?=site_url('admin/user/ajaxCheckUser');?>";
             var username = $("#inputEmail").val();
             if(username == ""){
                 $("#usernameError").text("用户名不能为空");
@@ -88,11 +79,6 @@
                     data: {"userName" : username},
                     dataType: "json",
                     success: function (result) {
-                        if(result.status == 0){
-                            $("#formreg").submit(function(e){
-                                e.preventDefault();
-                            });
-                        }
                         $("#usernameError").text(result.msg);
                     }
                 });
@@ -104,6 +90,15 @@
                 $("#passwordError").text("密码不能为空");
             }
         });
+
+        $("#submit").submit(function(){
+            var username = $("#inputEmail").val();
+            var password = $("#inputPassword").val();
+            if(username==""||password=="" ){
+                return false;
+            }
+        });
+
     });
 
     //    $("#submit").click(function(){

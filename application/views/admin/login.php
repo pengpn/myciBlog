@@ -31,7 +31,7 @@
 </head>
 
 <div class="container">
-    <form action="<?=site_url('admin/user/index') ?>" method="post" enctype="multipart/form-data" class="form-signin">
+    <form action="<?=site_url('admin/user/login') ?>" method="post" enctype="multipart/form-data" class="form-signin">
         <h2 class="form-signin-heading">MY_BLOG</h2>
         <label for="inputEmail" class="sr-only">用户名</label>
         <input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
