@@ -18,8 +18,7 @@ class User extends CI_Controller{
 
     public function index(){
 
-        //$this->load->view('admin/login');
-        echo "hello aa";
+        $this->load->view('admin/login');
 
     }
 
@@ -56,14 +55,22 @@ class User extends CI_Controller{
             if($this->form_validation->run() == false){
                 $this->load->view('admin/login');
             }else{
+
                 $username = $this->input->post("inputEmail");
                 $password = $this->input->post("inputPassword");
                 $userinfo = $this->checkUser($username);
+
                 if($userinfo){
                     $isVaild = $this->checkPwd($password,$userinfo->password);
+
                     if($isVaild){
-                        redirect('admin/user/index');
+                        $this->session->set_userdata('userName',$username);
+                        redirect('admin/home');
+                    }else{
+                        echo "密码不对";
                     }
+                }else{
+                    echo "没有该用户";
                 }
             }
         }else{
@@ -106,6 +113,15 @@ class User extends CI_Controller{
             return true;
         }
         return false;
+    }
+
+    //退出
+    public function logOut(){
+        if(!empty($this->session->userdata('userName'))){
+            $this->session->unset_userdata('userName');
+        }
+//        $this->session->sess_destroy();//销毁当前 session 。
+        redirect('admin/user/login');
     }
 
 

@@ -12,13 +12,13 @@
                 <span class="icon-bar"></span>
             </button>
 
-            <?php echo anchor('home', '后台管理', array('title'=>'后台管理','class'=>'navbar-brand')); ?>
+            后台管理
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><?php echo anchor('home', $_SESSION['LoginUser']); ?></li>
-                <li><?php echo anchor('login/log_out', '登出', array('title'=>'登出')); ?></li>
-                <li><?php echo anchor('home', '网站', array('title'=>'网站')); ?></li>
+                <li><a href="<?=site_url('admin/home');?>"><?php echo $_SESSION['userName']?></a></li>
+                <li><a href="<?=site_url('admin/user/logOut');?>">登出</a></li>
+                <li><a>网站</a></li>
             </ul>
         </div>
     </div>
@@ -28,13 +28,13 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li><?php echo anchor('article/create', '新建文章', array('title'=>'新建文章',)); ?></li>
-                <li><?php echo anchor('article', '所有文章', array('title'=>'所有文章',)); ?></li>
-                <li><?php echo anchor('category', '分类目录', array('title'=>'分类目录',)); ?></li>
-                <li><?php echo anchor('tag','标签', array('title'=>'标签',)); ?></li>
-                <li><?php echo anchor('user', '个人资料', array('title'=>'个人资料',)); ?></li>
-                <li><?php echo anchor('option', '常规设置', array('title'=>'常规设置',)); ?></li>
-                <li><?php echo anchor('about', '关于设置', array('title'=>'关于设置',)); ?></li>
-                <li><?php echo anchor('Test', '测试', array('title'=>'测试',)); ?></li>
+                <li><a>新建文章</a></li>
+                <li><a>所有文章</a></li>
+                <li><a>分类目录</a></li>
+                <li><a>标签</a></li>
+                <li><a>个人资料</a></li>
+                <li><a>常规设置</a></li>
+                <li><a>关于设置</a></li>
+                <li><a>测试</a></li>
             </ul>
         </div>

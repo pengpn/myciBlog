@@ -8,6 +8,10 @@
 class Home extends CI_Controller{
 
     public function index(){
-        $this->load->view("admin/");
+        if($this->session->userdata('userName')){//已经登陆
+            $this->load->view("admin/home");
+        }else{//没有登陆 跳回登陆界面
+            redirect('admin/user/login');
+        }
     }
 }
