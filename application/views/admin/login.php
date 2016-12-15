@@ -34,9 +34,11 @@
     <form action="<?=site_url('admin/user/login') ?>" method="post" enctype="multipart/form-data" class="form-signin">
         <h2 class="form-signin-heading">MY_BLOG</h2>
         <label for="inputEmail" class="sr-only">用户名</label>
-        <input type="email" id="inputEmail" name="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+        <input type="email" id="inputEmail" name="inputEmail" value="<?php echo set_value('inputEmail'); ?>" class="form-control" placeholder="Email address" autofocus="">
+        <?php echo form_error('inputEmail'); ?>
         <label for="inputPassword" class="sr-only">密码</label>
-        <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Password" required="">
+        <input type="password" id="inputPassword" name="inputPassword" value="<?php echo set_value('inputPassword'); ?>" class="form-control" placeholder="Password" >
+        <?php echo form_error('inputPassword'); ?>
         <div class="checkbox">
             <label>
                 <input type="checkbox" value="remember-me"> 下次自动登录

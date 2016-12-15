@@ -23,7 +23,7 @@ class User_Model extends CI_Model{
     public function getUserByUsername($username){
         if($username != null){
             $query = $this->db->get_where('my_user',array('name'=>$username));
-            $row = $query->row();
+            $row = $query->row_array();
             if(isset($row)){
                 return $row;
             }

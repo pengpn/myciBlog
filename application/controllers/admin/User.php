@@ -5,15 +5,18 @@
  * Date: 2016/12/8
  * Time: 10:29
  */
+defined('BASEPATH') OR exit('No direct script access allowed');
 class User extends CI_Controller{
     /**
      * User Constructor
      */
+    public $userinfo;
 
     public function __construct(){
         parent::__construct();
         $this->load->model('User_Model');
         $this->load->library('form_validation');
+        $this->form_validation->set_error_delimiters('<div class="error">', '</div>');
     }
 
     public function index(){
@@ -50,28 +53,16 @@ class User extends CI_Controller{
 
     public function login(){
         if($this->input->method() == 'post'){
-            $this->form_validation->set_rules('inputEmail','邮箱','required');
-            $this->form_validation->set_rules('inputPassword','密码','required');
+            $username = trim($this->input->post('inputEmail'));
+            $this->userinfo = $this->User_Model->getUserByUsername($username);
+            $this->form_validation->set_rules('inputEmail','邮箱','required|callback_username_check');
+            $this->form_validation->set_rules('inputPassword','密码','required|callback_password_check');
             if($this->form_validation->run() == false){
                 $this->load->view('admin/login');
             }else{
 
-                $username = $this->input->post("inputEmail");
-                $password = $this->input->post("inputPassword");
-                $userinfo = $this->checkUser($username);
-
-                if($userinfo){
-                    $isVaild = $this->checkPwd($password,$userinfo->password);
-
-                    if($isVaild){
-                        $this->session->set_userdata('userName',$username);
-                        redirect('admin/home');
-                    }else{
-                        echo "密码不对";
-                    }
-                }else{
-                    echo "没有该用户";
-                }
+                $this->session->set_userdata('userName',$username);
+                redirect('admin/home');
             }
         }else{
             $this->load->view('admin/login');
@@ -99,28 +90,32 @@ class User extends CI_Controller{
     }
 
     //判断用户名是否存在
-    private function checkUser($username){
+    public function username_check($username){
         $userinfo = $this->User_Model->getUserByUsername($username);
-        if(!empty($userinfo) && isset($userinfo)){
-            return $userinfo;
+        if($username == ''){
+            $this->form_validation->set_message('username_check','用户名不能为空');
+            return false;
+        }else if(empty($userinfo)){
+            $this->form_validation->set_message('username_check','用户不存在');
+            return false;
+        }else{
+            return true;
         }
-        return false;
     }
 
     //判断用户的密码是否正确
-    private function checkPwd($inputpwd,$pwd){
-        if(password_verify($inputpwd,$pwd)){
+    public function password_check($inputpwd){
+        if(password_verify($inputpwd,$this->userinfo['password'])){
             return true;
         }
+        $this->form_validation->set_message('password_check','密码错误');
         return false;
     }
 
     //退出
     public function logOut(){
-        if(!empty($this->session->userdata('userName'))){
-            $this->session->unset_userdata('userName');
-        }
-//        $this->session->sess_destroy();//销毁当前 session 。
+
+        $this->session->sess_destroy();//销毁当前 session 。
         redirect('admin/user/login');
     }
 
